@@ -8,7 +8,7 @@ import {
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -37,20 +37,29 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+	session: {
+		strategy: "jwt",
+	},
 	callbacks: {
-		session: ({ session, user }) => ({
-			...session,
-			user: {
-				...session.user,
-				id: user.id,
-			},
-		}),
+		jwt: async ({ token, user }) => {
+			console.log("jwt callback", { token });
+			if (user) {
+				token.id = user.id;
+			}
+			return token;
+		},
+		session: ({ session, token }) => {
+			if (token) {
+				session.user.id = token.id as string;
+			}
+			return session;
+		},
 	},
 	adapter: PrismaAdapter(prisma),
 	providers: [
-		GithubProvider({
-			clientId: env.GITHUB_CLIENT_ID,
-			clientSecret: env.GITHUB_CLIENT_SECRET,
+		GoogleProvider({
+			clientId: env.GOOGLE_CLIENT_ID,
+			clientSecret: env.GOOGLE_CLIENT_SECRET,
 		}),
 		/**
 		 * ...add more providers here.
