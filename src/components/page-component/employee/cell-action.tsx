@@ -91,7 +91,10 @@ export function CellAction({ data }: CellActionProps) {
 				name={data.firstName}
 				isOpen={alertModalOpen}
 				onClose={() => setAlertModalOpen(false)}
-				onConfirm={() => deleteEmployee(data.id)}
+				onConfirm={() => {
+					deleteEmployee(data.id);
+					setAlertModalOpen(false);
+				}}
 				loading={deleteEmployeeIsLoading}
 			/>
 		</div>

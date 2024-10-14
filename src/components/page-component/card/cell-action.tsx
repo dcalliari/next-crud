@@ -91,7 +91,10 @@ export function CellAction({ data }: CellActionProps) {
 				name={data.cardNumber}
 				isOpen={alertModalOpen}
 				onClose={() => setAlertModalOpen(false)}
-				onConfirm={() => deleteCard(data.id)}
+				onConfirm={() => {
+					deleteCard(data.id);
+					setAlertModalOpen(false);
+				}}
 				loading={deleteCardIsLoading}
 			/>
 		</div>
