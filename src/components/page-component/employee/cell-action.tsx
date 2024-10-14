@@ -10,7 +10,7 @@ import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
+import { useSession } from "next-auth/react";
 import { AlertModal } from "@/components/common/alert-modal";
 import type { EmployeeColumn } from "@/lib/validators";
 import { Pencil, Trash2 } from "lucide-react";
@@ -20,6 +20,7 @@ interface CellActionProps {
 }
 
 export function CellAction({ data }: CellActionProps) {
+	const { data: session } = useSession();
 	const router = useRouter();
 	const [alertModalOpen, setAlertModalOpen] = useState(false);
 
@@ -37,6 +38,10 @@ export function CellAction({ data }: CellActionProps) {
 				await refetch();
 			},
 		});
+
+	if (!session) {
+		return null;
+	}
 
 	return (
 		<div className="flex justify-center space-x-2">

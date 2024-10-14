@@ -2,9 +2,17 @@ import { Loading } from "@/components/common/loading";
 import { CardForm } from "@/components/page-component/card/card-form";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
+import { useSession, signIn } from "next-auth/react";
 import React from "react";
 
 const Card = () => {
+	const { data: session } = useSession();
+
+	if (!session) {
+		signIn();
+		return null;
+	}
+
 	const router = useRouter();
 	const { id } = router.query;
 

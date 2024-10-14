@@ -8,12 +8,14 @@ import type { CardColumn } from "@/lib/validators";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useSession } from "next-auth/react";
 import { columns } from "./columns";
 
 interface CardClientProps {
 	data: CardColumn[];
 }
 export const CardClient = ({ data }: CardClientProps) => {
+	const { data: session } = useSession();
 	const router = useRouter();
 
 	return (
@@ -23,13 +25,15 @@ export const CardClient = ({ data }: CardClientProps) => {
 					title="Benefit Card (CRUD)"
 					description="Manage Benefit Cards for you business"
 				/>
-				<Button
-					onClick={() => {
-						router.push("/cards/new");
-					}}
-				>
-					<Plus className="mr-2 h-4 w-4" /> Add New
-				</Button>
+				{session && (
+					<Button
+						onClick={() => {
+							router.push("/cards/new");
+						}}
+					>
+						<Plus className="mr-2 h-4 w-4" /> Add New
+					</Button>
+				)}
 			</div>
 			<Separator />
 			<div>
