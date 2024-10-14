@@ -52,7 +52,6 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-
 model Employee {
     id         String  @id @default(cuid())
     firstName  String  @map("first_name")
@@ -71,5 +70,5 @@ model Card {
     createAt   DateTime @default(now()) @map("create_at")
     updateAt   DateTime @default(now()) @updatedAt @map("update_at")
     employeeId String
-    employee   Employee @relation(fields: [employeeId], references: [id])
+    employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
